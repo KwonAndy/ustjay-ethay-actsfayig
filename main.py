@@ -19,8 +19,25 @@ def get_fact():
 
 @app.route('/')
 def home():
-    return "FILL ME!"
 
+    fact = get_fact()
+
+    # Send a request to https://hidden-journey-62459.herokuapp.com/piglatinize/
+    # it should be a POST request, and it should ahve form data with 'input_text' 
+    # of the fact that we scraped. And use the keyword argument 'follow_redirects=False'
+    # when making your request so that you can capture and analyze the redirect response
+    # Looks like:
+
+    response = requests.post('https://hidden-journey-62459.herokuapp.com/piglatinize/',
+        data = {'input_text': fact},
+        allow_redirects = False,)
+
+    # Then, get the 'Location' header from the response
+
+    location_header = response.headers['Location']
+
+    return "<a href='{}'>{}</a>".format(location_header, location_header)
+    # return location_header
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 6787))
